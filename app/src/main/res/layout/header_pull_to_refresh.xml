@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <!-- 提示 -->
+
+            <TextView
+                android:id="@+id/head_tipsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+            <!-- 最近更新 -->
+
+            <TextView
+                android:id="@+id/head_lastUpdatedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <!-- 箭头图像、进度条 -->
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@id/text" >
+
+            <!-- 箭头 -->
+
+            <ImageView
+                android:id="@+id/head_arrowImageView"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/refresh_arrow" />
+
+            <!-- 进度条 -->
+
+            <ProgressBar
+                android:id="@+id/head_progressBar"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+        </FrameLayout>
+
+</merge>
