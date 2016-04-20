@@ -1,0 +1,4 @@
+# PullToRefresh
+下拉刷新控件，支持ListView,ScrollView,RecyclerView
+聊天界面开始是用ListView实现的，现在想改用RecyclerView，找了好多支持RecyclerView的下拉刷新的Demo没有满意的，
+自己参照SwipeRefreshLayout写了一个，目前只有下拉刷新的功能
