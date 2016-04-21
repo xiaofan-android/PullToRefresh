@@ -4,9 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
-/**
- * Created by 范强 on 2016/4/18.
- */
+
 public abstract class BaseHeaderView extends RelativeLayout{
 
     public BaseHeaderView(Context context) {

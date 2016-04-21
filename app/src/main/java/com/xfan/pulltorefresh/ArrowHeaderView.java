@@ -8,9 +8,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-/**
- * Created by 范强 on 2016/4/20.
- */
 public class ArrowHeaderView extends BaseHeaderView {
 
     private ImageView mArrow;

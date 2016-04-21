@@ -13,9 +13,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 
-/**
- * Created by 范强 on 2016/4/18.
- */
 public class PullToRefreshView extends LinearLayout {
     private static final String TAG = "PullToRefreshViewImpl";
 
