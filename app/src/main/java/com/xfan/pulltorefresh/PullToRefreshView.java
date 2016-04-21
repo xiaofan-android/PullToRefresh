@@ -25,7 +25,7 @@ public class PullToRefreshView extends LinearLayout {
     private static final int STATE_COMPLETE = 4;
     private int mHeaderState = STATE_COMPLETE;
 
-    protected BaseHeaderView mHeaderView;
+    private BaseHeaderView mHeaderView;
     private View mTarget;
 
     private boolean isFirstLayout = true;
@@ -36,6 +36,7 @@ public class PullToRefreshView extends LinearLayout {
     private int mHeaderSize;
     private int mHeaderMargin;
     private OnRefreshListener mOnRefreshListener;
+    private int mMaxMargin;
 
     public PullToRefreshView(Context context) {
         this(context, null);
@@ -88,7 +89,6 @@ public class PullToRefreshView extends LinearLayout {
 
     public void refreshComplete(){
         animToStartLocal();
-        mHeaderState = STATE_COMPLETE;
     }
 
     protected LayoutParams getHeaderLayoutParams(){
@@ -107,6 +107,7 @@ public class PullToRefreshView extends LinearLayout {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if(isFirstLayout){
             mHeaderSize = mHeaderView.getMeasuredHeight();
+            mMaxMargin = mHeaderSize * 2;
             MarginLayoutParams params = (MarginLayoutParams) mHeaderView.getLayoutParams();
             params.topMargin = -mHeaderSize;
             mHeaderMargin = -mHeaderSize;
@@ -161,11 +162,11 @@ public class PullToRefreshView extends LinearLayout {
                 if (mActivePointerId == -1) {
                     return false;
                 }
-                float my = ev.getY(ev.findPointerIndex(mActivePointerId));
-                if (my == -1) {
+                if(!isEnabled() || mTarget == null || mHeaderState != STATE_COMPLETE|| canChildScrollUp()){
                     return false;
                 }
-                if(!isEnabled() || mTarget == null || mHeaderState == STATE_REFRESHING || canChildScrollUp()){
+                float my = ev.getY(ev.findPointerIndex(mActivePointerId));
+                if (my == -1) {
                     return false;
                 }
                 float offsetY = my - mStartY;
@@ -200,17 +201,26 @@ public class PullToRefreshView extends LinearLayout {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 if(mHeaderState == STATE_WILL_REFRESH){
-                    animToRefreshLoacl();
+                    animToRefreshLocal();
                 } else if(mHeaderState == STATE_PULLING){
                     animToStartLocal();
                 }
+                mActivePointerId = -1;
                 break;
         }
         return false;
     }
 
     private void updateHeaderMargin(float offY){
-        mHeaderMargin = mHeaderMargin + (int) (offY / 3);
+        if(mHeaderMargin >= mMaxMargin){
+            mHeaderMargin = mMaxMargin;
+        }
+        float maxMargin = mMaxMargin;
+        float scale = .3f;
+        if(mHeaderMargin > 0){
+            scale = (maxMargin - mHeaderMargin) / mMaxMargin * .3f;
+        }
+        mHeaderMargin = mHeaderMargin + (int) (offY * scale);
         if (mHeaderMargin <= -mHeaderSize) {
             mHeaderMargin = -mHeaderSize;
         }
@@ -233,7 +243,7 @@ public class PullToRefreshView extends LinearLayout {
         }
     }
 
-    private void animToRefreshLoacl(){
+    private void animToRefreshLocal(){
         if(mHeaderState != STATE_WILL_REFRESH){
             return;
         }
@@ -275,6 +285,12 @@ public class PullToRefreshView extends LinearLayout {
                 params.topMargin = margin;
                 mHeaderMargin = margin;
                 mHeaderView.setLayoutParams(params);
+            }
+        });
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mHeaderState = STATE_COMPLETE;
             }
         });
         anim.start();
